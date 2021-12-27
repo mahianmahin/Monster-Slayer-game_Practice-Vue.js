@@ -8,6 +8,7 @@ const app = Vue.createApp({
             playerHealth: 100,
             monsterHealth: 100,
             specialAttackCounter: 0,
+            healCounter: 0,
         }
     },
 
@@ -26,6 +27,14 @@ const app = Vue.createApp({
             } else {
                 return true;
             }
+        },
+
+        healPermission() {
+            if (this.healCounter >= 4) {
+                return false;
+            } else {
+                return true;
+            }
         }
     },
 
@@ -34,6 +43,7 @@ const app = Vue.createApp({
             const attackValue = getRandomValue(5, 12);
             this.monsterHealth = this.monsterHealth - attackValue;
             this.specialAttackCounter += 1;
+            this.healCounter += 1;
             this.attackPlayer();
         },
 
@@ -47,7 +57,21 @@ const app = Vue.createApp({
             this.monsterHealth = this.monsterHealth - attackValue;
             this.specialAttackCounter = 0;
             this.attackPlayer();
-        }
+        },
+
+        healPlayer() {
+            this.healCounter = 0;
+
+            const healValue = getRandomValue(8, 20);
+
+            if (this.playerHealth + healValue > 100) {
+                this.playerHealth = 100;
+            } else {
+                this.playerHealth += healValue;
+            }
+
+            this.attackPlayer();
+        },
     }
 });
 
