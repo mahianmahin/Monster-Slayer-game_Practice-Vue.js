@@ -6,7 +6,26 @@ const app = Vue.createApp({
     data() {
         return {
             playerHealth: 100,
-            monsterHealth: 100
+            monsterHealth: 100,
+            specialAttackCounter: 0,
+        }
+    },
+
+    computed: {
+        monsterBarStyle() {
+            return { width: this.monsterHealth + '%' };
+        },
+
+        playerBarStyle() {
+            return { width: this.playerHealth + '%' };
+        },
+
+        specialAttackPermission() {
+            if (this.specialAttackCounter >= 3) {
+                return false;
+            } else {
+                return true;
+            }
         }
     },
 
@@ -14,14 +33,20 @@ const app = Vue.createApp({
         attackMoster() {
             const attackValue = getRandomValue(5, 12);
             this.monsterHealth = this.monsterHealth - attackValue;
-            console.log(`monster health == ${this.monsterHealth}`);
+            this.specialAttackCounter += 1;
             this.attackPlayer();
         },
 
         attackPlayer() {
             const attackValue = getRandomValue(8, 15);
             this.playerHealth = this.playerHealth - attackValue;
-            console.log(`player health == ${this.playerHealth}`);
+        },
+
+        specialAttackMonster() {
+            const attackValue = getRandomValue(15, 35);
+            this.monsterHealth = this.monsterHealth - attackValue;
+            this.specialAttackCounter = 0;
+            this.attackPlayer();
         }
     }
 });
